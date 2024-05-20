@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Registration form</title>
+    </head>
+    <style>
+                .space > *{
+            margin-bottom: 20px;
+        }
+                .error-message{
+                    color: red;
+                }
+    </style>
+    <body>
+        
+        <form action="insert.php" method="POST">
+            <div class="space">
+            Name:<input type="text" id="textt" name="username" placeholder="Name" value="srija" required><br>
+
+            password:<input type="password" id="pasward" name="password" placeholder="password" value="srija123" required><br>
+            <p id="paswardstrength"></p>
+
+            <input type="radio" name="gender" value="m" select required>Male
+            <input type="radio" name="gender" value="f" required>Female<br>
+
+            Email Id:<input type="email" id="emailv" name="email" onclick="emailValidation()" value="srija@gmail.com" required><br>
+            <span id="emailError" class="error-message"></span>
+
+            Phone:<input type="tel" id="nnumber" name="phone" onblur="phonenumber()" value="9247455535" required><br>
+            <span id="numError" class="error-message"></span>
+
+            <button type="submit" name="Submit"> Submit</button>
+
+            </div>
+
+        </form>
+        <script src="javascrip.js"></script>
+        <script>number()</script>
+        <script>pasward()</script>
+    
+    </body>
+       
+    
+</html>
