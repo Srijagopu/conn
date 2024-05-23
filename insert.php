@@ -1,50 +1,55 @@
 <?php
-$username=$_POST['username'];
-$password=$_POST['password'];
-$gender=$_POST['gender'];
-$email=$_POST['email'];
-$phone=$_POST['phone'];
+$username = $_POST['username'];
+$password = $_POST['password'];
+$gender = $_POST['gender'];
+$email = $_POST['email'];
+$phone = $_POST['phone'];
+$country = $_POST['country'];  // Country ID
+$state = $_POST['state'];      // State ID
+$city = $_POST['city'];        // City ID
 
-if(!empty($username)|| !empty($password)|| !empty($gender)||
- !empty($email)|| !empty($phone)){
-    $host="localhost";
-    $dbUsername="root";
-    $dbPassword="";
-    $dbname="test";
+if (!empty($username) && !empty($password) && !empty($gender) &&
+    !empty($email) && !empty($phone) && !empty($country) && !empty($state) && !empty($city)) {
 
-    $connect=new mysqli($host,$dbUsername,$dbPassword,$dbname);
-    if (mysqli_connect_error()){
-        die('Connect Error('.mysqli_connect_errno().')'. mysqli_connect_error());
+    $host = "localhost";
+    $dbUsername = "root";
+    $dbPassword = "";
+    $dbname = "test";
 
-    } else{
-        $SELECT="SELECT email FROM registrations WHERE email = ? LIMIT 1";
-        $INSERT="INSERT Into registrations(username,password,gender,email,phone) VALUES(?,?,?,?,?)";
+    // Create connection
+    $connect = new mysqli($host, $dbUsername, $dbPassword, $dbname);
 
-        $stmt=$connect->prepare($SELECT);
+    // Check connection
+    if ($connect->connect_error) {
+        die('Connect Error (' . $connect->connect_errno . ') ' . $connect->connect_error);
+    } else {
+        $SELECT = "SELECT email FROM registernow WHERE email = ? LIMIT 1";
+        $INSERT = "INSERT INTO registernow (username, password, gender, email, phone, country, state, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        // Prepare statement
+        $stmt = $connect->prepare($SELECT);
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
         $rnum = $stmt->num_rows;
 
-    
-
-        if ($rnum=0){
+        if ($rnum == 0) {
             $stmt->close();
-            $stmt=$connect->prepare($INSERT);
-            $stmt->bind_param('ssssi',$username,$password,$gender,$email,$phone);
+
+            // Hash the password before storing it
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $connect->prepare($INSERT);
+            $stmt->bind_param("ssssssss", $username, $hashedPassword, $gender, $email, $phone, $country, $state, $city);
             $stmt->execute();
-            echo "New record inserted sucessfully";
-        } else{
-            echo "Someone already using this email";
+            echo "New record inserted successfully";
+        } else {
+            echo "Someone is already using this email";
         }
-        $stmt -> close();
-        $connect ->close();
-        
+        $stmt->close();
+        $connect->close();
     }
-
- } else{
-    echo "All field are required";
+} else {
+    echo "All fields are required";
     die();
- }
-
+}
 ?>

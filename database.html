@@ -30,6 +30,18 @@
                 <option>Select country</option>
             </select>
 
+            State:<select type="text" id="state" name="state" class="form-control">
+                <option>Select State</option>
+            </select>
+
+            City:<select type="text" id="city" name="city" class="form-control">
+                <option>Select city</option>
+            </select>
+
+
+        
+            <br>
+
             Phone:<input type="tel" id="number" name="phone" onblur="phonenumber()" value="9247455535" required><br>
             <span id="numError" class="error-message"></span>
 
@@ -38,6 +50,61 @@
             </div>
 
         </form>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('#country').change(function(){
+                    loadState($(this).find(':selected').val())
+                })
+                $('#state').change(function(){
+                    loadCity($(this).find(':selected').val())
+            })
+        });
+
+        function loadCountry(){
+            $.ajax({
+                type:"POST",
+                url:"ajax.php",
+                data:"get=country"
+            }).done(function(result){
+                $(result).each(function(){
+                    $('#country').append($(result));
+
+                })
+            });
+        }
+
+        function loadState(countryId){
+            $("#state").children().remove()
+            $.ajax({
+                type:"POST",
+                url:"ajax.php",
+                data:"get=state&countryId="+countryId
+            }).done(function(result){
+                $("#state").append($(result));
+            });
+
+    
+            
+        }
+
+        function loadCity(stateId){
+            $("#city").children().remove()
+            $.ajax({
+                type:"POST",
+                url:"ajax.php",
+                data:"get=city&stateId="+stateId
+            }).done(function(result){
+                $("#city").append($(result));
+            });
+
+    
+            
+        }
+        loadCountry();
+
+
+       </script>
         <script src="javascrip.js"></script>
         <script>number()</script>
         <script>pasward()</script>
