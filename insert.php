@@ -14,7 +14,7 @@ if (!empty($username) && !empty($password) && !empty($gender) &&
     $host = "localhost";
     $dbUsername = "root";
     $dbPassword = "";
-    $dbname = "test";
+    $dbname = "tests";
 
     // Create connection
     $connect = new mysqli($host, $dbUsername, $dbPassword, $dbname);
